@@ -25,7 +25,7 @@
                            (for [[k f] desc-map] [k (f)])))))
 
 (def table-data
-  (let [AMOUNT 2
+  (let [AMOUNT 100
         A (atom 0)]
     (r/atom (gen-table-data AMOUNT
                             {:name #(str "John Doe " (swap! A inc))
@@ -41,7 +41,7 @@
                           :guid #(rand-int 1000)}))
 
 (def table-data2
-  (let [AMOUNT 8
+  (let [AMOUNT 100
         A (atom 0)]
     (r/atom (gen-table-data AMOUNT
                             {:name #(str "Jane Dear " (swap! A inc))
@@ -53,7 +53,7 @@
 (defn empty-link
   "Make an empty link thing for each entry with the text inside"
   [val]
-  [:a {:href     val
+  [:a {#_#_:href     val
        :on-click #(js/alert (str "You clicked on " val))} val])
 
 (defn my-valfn
@@ -64,7 +64,7 @@
 (defn home-page []
   (let [controls {:paging  nil #_{:rr-content        "First"
                                   :get-amount        (constantly (/ AMOUNT 3))}
-                  :columns [{:valfn     identity
+                  :columns [{:valfn     #(identity %)
                              :headline  "ID"
                              :sortfn    (fn [entry] (let [id (:id entry) ]
                                                       (cond
@@ -72,8 +72,21 @@
                                                         (<= 2 id) id)))
                              :sort      true
                              :filter    true
-                             :displayfn #(:id %)}
-                            {:valfn     my-valfn
+                             :displayfn :id}
+
+                            {:valfn     identity
+                             :headline  "ID2"
+                             :sortfn    (fn [entry] (let [id (:id entry) ]
+                                                      (cond
+                                                        (> 3 id)  (- 5 id)
+                                                        (<= 2 id) id)))
+                             :sort      true
+                             :filter    true
+                             :displayfn #(select-keys % [:id :job ])}
+
+
+                            
+                            {:valfn     #(:name % (:job %)) #_#(my-valfn %)
                              :displayfn empty-link
                              :headline  "Name"
                              :sort      true
@@ -91,7 +104,7 @@
                                                                    :margin-right "1em"}} "I'm on the left"]
                                   :right-bar-content [:h3 "I'm on the right"]
                                   :get-amount        (constantly (/ AMOUNT 3))}
-                  :columns [{:valfn     identity
+                   :columns [{:valfn     #(identity %)
                              :headline  "ID"
                              :sortfn    (fn [entry] (let [id (:id entry) ]
                                                       (cond

@@ -12,6 +12,9 @@
                      :stylesheet retabled.styles/main
                      :compiler {:output-to "test/resources/public/css/style.css"
                                 :pretty-print? true}}]}
+  :codox {:output-path "docs"
+          :source-paths ["src"]}
+  
   :profiles {:dev {:jvm-opts ["-server" "-Dconf=.lein-env"]
                    :resource-paths ["test/resources" "test/target/cljsbuild"]
                    :target-path "test/target/"
@@ -59,6 +62,7 @@
                                   [cljsjs/react-dom "16.8.1-0"]
                                   [cljsjs/react-dom-server "16.8.1-0"]]
                    :plugins [[com.jakemccrary/lein-test-refresh "0.14.0"]
+                             [lein-codox "0.10.7"]
                              [lein-doo "0.1.7"]
                              [lein-figwheel "0.5.12"]
                              [org.clojure/clojurescript "1.10.439"]
